@@ -4,6 +4,7 @@ from copy import deepcopy
 from itertools import permutations
 from tqdm import tqdm
 import pickle
+from typing import Union
 
 FILENAME = '00016-00000001.toi'
 
@@ -19,7 +20,7 @@ class STV:
         # The list of currently available alternatives. Known to be 11 in the beginning
         self.alternatives: List[int] = list(range(1,12))
         self.relevant_alternatives: List[int] = [1,2,3,4,5,6,7,8,9]
-        self.relevant_alternatives_permutations: List[List[int]] = permutations(self.relevant_alternatives)
+        self.relevant_alternatives_permutations: List[List[int]] = list(permutations(self.relevant_alternatives))
 
         with open(filename) as f:
             for line in f:
@@ -72,7 +73,7 @@ class STV:
                                                          for ballot, count in zip(self.unique_ballots, self.counts_ballots) 
                                                          if ballot])
 
-    def elect(self) -> List[int] | int:
+    def elect(self) -> Union[List[int], int]:
         while True:
             
             # Single winner is found!
@@ -89,16 +90,16 @@ class STV:
     
     def manipulate(self, x: int) -> None:
         elections = {}
-        for permutation in tqdm(self.relevant_alternatives_permutations):
+        #for permutation in tqdm(self.relevant_alternatives_permutations):
+        for permutation in self.relevant_alternatives_permutations:
             
-            for ballot in self.unique_ballots:
+            for i, ballot in enumerate(self.unique_ballots):
                 if x in ballot:
                     if 8 in ballot:
                         if ballot.index(x) < ballot.index(8):
-                            ballot = permutation
+                            self.unique_ballots[i] = list(permutation)
                     else:
-                        ballot = permutation
-
+                        self.unique_ballots[i] = list(permutation)
             output = self.elect()
             if output not in elections: elections[output] = 0
             elections[output] += 1
@@ -127,11 +128,12 @@ if __name__ == '__main__':
     #             count += 8 in ballot and (alternative not in ballot or ballot.index(8) < ballot.index(alternative))
     #     print(alternative, count)
     # print('*' * 50)
+
     results = {}
-    for i in stv.relevant_alternatives:
+    for i in tqdm(stv.relevant_alternatives):
+        if i == 8: continue
         results[i] = stv.manipulate(i)
-    with open('filename.pickle', 'wb') as handle:
-        pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    print(results)
 
     # winner = stv.elect()
     # print(f'Winner: {winner}')

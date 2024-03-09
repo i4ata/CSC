@@ -1,0 +1,58 @@
+
+The following have been reloaded with a version change:
+  1) GCCcore/11.2.0 => GCCcore/11.3.0
+  2) GMP/6.2.1-GCCcore-11.2.0 => GMP/6.2.1-GCCcore-11.3.0
+  3) Python/3.9.6-GCCcore-11.2.0 => Python/3.10.4-GCCcore-11.3.0
+  4) SQLite/3.36-GCCcore-11.2.0 => SQLite/3.38.3-GCCcore-11.3.0
+  5) Tcl/8.6.11-GCCcore-11.2.0 => Tcl/8.6.12-GCCcore-11.3.0
+  6) XZ/5.2.5-GCCcore-11.2.0 => XZ/5.2.5-GCCcore-11.3.0
+  7) binutils/2.37-GCCcore-11.2.0 => binutils/2.38-GCCcore-11.3.0
+  8) bzip2/1.0.8-GCCcore-11.2.0 => bzip2/1.0.8-GCCcore-11.3.0
+  9) libffi/3.4.2-GCCcore-11.2.0 => libffi/3.4.2-GCCcore-11.3.0
+ 10) libreadline/8.1-GCCcore-11.2.0 => libreadline/8.1.2-GCCcore-11.3.0
+ 11) ncurses/6.2-GCCcore-11.2.0 => ncurses/6.3-GCCcore-11.3.0
+ 12) zlib/1.2.11-GCCcore-11.2.0 => zlib/1.2.12-GCCcore-11.3.0
+
+  0%|          | 0/9 [00:00<?, ?it/s] 11%|█         | 1/9 [54:40<7:17:21, 3280.13s/it] 22%|██▏       | 2/9 [1:49:37<6:23:53, 3290.56s/it] 33%|███▎      | 3/9 [2:44:44<5:29:46, 3297.81s/it] 44%|████▍     | 4/9 [3:40:47<4:36:58, 3323.71s/it] 56%|█████▌    | 5/9 [4:36:40<3:42:16, 3334.03s/it] 67%|██████▋   | 6/9 [5:30:28<2:44:54, 3298.09s/it] 78%|███████▊  | 7/9 [6:21:43<1:47:30, 3225.08s/it]100%|██████████| 9/9 [7:12:20<00:00, 2400.94s/it]  100%|██████████| 9/9 [7:12:20<00:00, 2882.28s/it]
+{1: {8: 362880}, 2: {8: 362880}, 3: {8: 362880}, 4: {8: 362880}, 5: {8: 362880}, 6: {8: 362880}, 7: {8: 362880}, 9: {8: 362880}}
+25940.62963461876
+
+###############################################################################
+Hábrók Cluster
+Job 7598116 for user s4362675
+Finished at: Sat Mar  9 01:57:33 CET 2024
+
+Job details:
+============
+
+Job ID              : 7598116
+Name                : csc_hw
+User                : s4362675
+Partition           : regularmedium
+Nodes               : node95
+Number of Nodes     : 1
+Cores               : 1
+Number of Tasks     : 1
+State               : RUNNING
+Submit              : 2024-03-08T18:45:06
+Start               : 2024-03-08T18:45:08
+End                 : --
+Reserved walltime   : 20:00:00
+Used walltime       : 07:12:25
+Used CPU time       : --
+% User (Computation): --
+% System (I/O)      : --
+Mem reserved        : 8000M
+Max Mem (Node/step) : 0.00  (Node unknown, N/A)
+Full Max Mem usage  : 0.00  (Until last completed step)
+Total Disk Read     : 0.00  (Until last completed step)
+Total Disk Write    : 0.00  (Until last completed step)
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Hábrók in your publications:
+
+https://wiki.hpc.rug.nl/habrok/introduction/scientific_output
+
+################################################################################
