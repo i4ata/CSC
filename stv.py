@@ -3,7 +3,7 @@ import time
 from copy import deepcopy
 from itertools import permutations
 from tqdm import tqdm
-import pickle
+import json
 from typing import Union
 
 FILENAME = '00016-00000001.toi'
@@ -11,14 +11,18 @@ FILENAME = '00016-00000001.toi'
 class STV:
     def __init__(self, filename=FILENAME) -> None:
 
+        # Store the unique voters' ballots
         # [index, linear order]
         self.unique_ballots_original: List[List[int]] = []
         
+        # Store the number of voters with the same ballots
         # [index, count of identical ballots]
         self.counts_ballots: List[int] = []
 
         # The list of currently available alternatives. Known to be 11 in the beginning
         self.alternatives: List[int] = list(range(1,12))
+
+        # Define all possible ballots (exclude 10 and 11 since they appear very rarely)
         self.relevant_alternatives: List[int] = [1,2,3,4,5,6,7,8,9]
         self.relevant_alternatives_permutations: List[List[int]] = list(permutations(self.relevant_alternatives))
 
@@ -38,6 +42,7 @@ class STV:
         self.reset()
         
     def reset(self) -> None:
+        """Reset the ballots to the original ones"""
         self.unique_ballots = deepcopy(self.unique_ballots_original)
 
     def sigma(self) -> None:
@@ -49,9 +54,11 @@ class STV:
         # Find the plurality scores for each top choice
         frequencies = {}
         for choice, count in zip(top_choices, self.counts_ballots):
-            if frequencies.get(choice) is None:
+            if choice not in frequencies:
                 frequencies[choice] = 0
             frequencies[choice] += count
+
+        # Case where there are alternatives with a plurality score of 0
         alternatives_to_remove = []
         zero_votes = False
         for alternative in self.alternatives:
@@ -59,7 +66,7 @@ class STV:
                 alternatives_to_remove.append(alternative)
                 zero_votes = True
 
-        # Else, get the alternatives with the smallest plurality score 
+        # Get the alternatives with the smallest plurality score 
         if not zero_votes:
             min_votes = min(frequencies.values())
             alternatives_to_remove = [x for x in frequencies if frequencies[x] == min_votes]
@@ -69,9 +76,9 @@ class STV:
             self.alternatives.remove(alternative)
             for ballot in self.unique_ballots:
                 if alternative in ballot: ballot.remove(alternative)
-        self.unique_ballots, self.counts_ballots = zip(*[(ballot, count) 
-                                                         for ballot, count in zip(self.unique_ballots, self.counts_ballots) 
-                                                         if ballot])
+        self.unique_ballots, self.counts_ballots = (
+            zip(*[(ballot, count) for ballot, count in zip(self.unique_ballots, self.counts_ballots) if ballot])
+        )
 
     def elect(self) -> Union[List[int], int]:
         while True:
@@ -90,9 +97,11 @@ class STV:
     
     def manipulate(self, x: int) -> None:
         elections = {}
-        #for permutation in tqdm(self.relevant_alternatives_permutations):
+
+        # Try all possible linear orders
         for permutation in self.relevant_alternatives_permutations:
             
+            # For each agent, if the agent prefers 'x' over '8', replace its preference with the current permutation
             for i, ballot in enumerate(self.unique_ballots):
                 if x in ballot:
                     if 8 in ballot:
@@ -100,10 +109,13 @@ class STV:
                             self.unique_ballots[i] = list(permutation)
                     else:
                         self.unique_ballots[i] = list(permutation)
+
+            # Elect a winner and record it
             output = self.elect()
             if output not in elections: elections[output] = 0
             elections[output] += 1
 
+            # Reset the election, so the voters come back to their true preferences
             self.reset()
         
         return elections
@@ -128,7 +140,6 @@ if __name__ == '__main__':
     #             count += 8 in ballot and (alternative not in ballot or ballot.index(8) < ballot.index(alternative))
     #     print(alternative, count)
     # print('*' * 50)
-
     results = {}
     for i in tqdm(stv.relevant_alternatives):
         if i == 8: continue
